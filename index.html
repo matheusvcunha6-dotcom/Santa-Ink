@@ -301,21 +301,64 @@
         </section>
       );
 
-      const Gallery = () => (
-        <section id="galeria" className="py-24 bg-zinc-950 px-4 sm:px-6 lg:px-8 border-t border-zinc-900">
-          <div className="max-w-7xl mx-auto">
-            <SectionTitle title="Galeria" subtitle="divider" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-              {GALLERY_IMAGES.map((img, i) => (
-                <div key={i} className="aspect-square relative group overflow-hidden bg-zinc-900">
-                  <img src={img} alt={`Work ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter grayscale group-hover:grayscale-0" />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span className="font-display text-white text-sm uppercase tracking-widest border border-white px-3 py-1">Ver</span></div>
-                </div>
-              ))}
+const Gallery = () => {
+        // Estado para controlar a imagem aberta (null = nenhuma aberta)
+        const [selectedImage, setSelectedImage] = useState(null);
+
+        return (
+          <section id="galeria" className="py-24 bg-zinc-950 px-4 sm:px-6 lg:px-8 border-t border-zinc-900">
+            <div className="max-w-7xl mx-auto">
+              <SectionTitle title="Galeria" subtitle="divider" />
+              
+              {/* Grid de Imagens */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+                {GALLERY_IMAGES.map((img, i) => (
+                  <div 
+                    key={i} 
+                    className="aspect-square relative group overflow-hidden bg-zinc-900 cursor-pointer"
+                    onClick={() => setSelectedImage(img)} // Abre a imagem ao clicar
+                  >
+                    <img 
+                      src={img} 
+                      alt={`Work ${i + 1}`} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter grayscale group-hover:grayscale-0" 
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="font-display text-white text-sm uppercase tracking-widest border border-white px-3 py-1">
+                        Ver
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      );
+
+            {/* Modal / Lightbox (Abre quando selectedImage tem valor) */}
+            {selectedImage && (
+              <div 
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+                onClick={() => setSelectedImage(null)} // Fecha ao clicar fora
+              >
+                {/* Botão Fechar */}
+                <button 
+                  onClick={() => setSelectedImage(null)}
+                  className="absolute top-6 right-6 text-zinc-400 hover:text-white transition-colors"
+                >
+                  <X size={40} />
+                </button>
+
+                {/* Imagem Expandida */}
+                <img 
+                  src={selectedImage} 
+                  alt="Full size" 
+                  className="max-w-full max-h-[90vh] object-contain shadow-2xl drop-shadow-2xl rounded-sm"
+                  onClick={(e) => e.stopPropagation()} // Evita fechar se clicar na imagem
+                />
+              </div>
+            )}
+          </section>
+        );
+      };
 
       const FAQItem = ({ question, answer }) => {
         const [isOpen, setIsOpen] = useState(false);
@@ -337,7 +380,7 @@
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16"><h4 className="font-display text-zinc-600 tracking-[0.6em] uppercase text-xs mb-4">Central de Ajuda</h4><SectionTitle title="Dúvidas Frequentes" centered /></div>
             <div className="space-y-6">{FAQS.map((f, i) => <FAQItem key={i} {...f} />)}</div>
-            <div className="mt-20 text-center"><p className="text-zinc-600 text-sm font-sans mb-4">Ainda tem alguma pergunta?</p><a href="https://wa.me/551149623941" className="text-white border-b border-zinc-800 hover:border-white transition-all pb-1 font-display uppercase tracking-widest text-sm">Fale conosco via WhatsApp</a></div>
+            <div className="mt-20 text-center"><p className="text-zinc-600 text-sm font-sans mb-4">Ainda tem alguma pergunta?</p><a href="https://wa.me/5511980519891" className="text-white border-b border-zinc-800 hover:border-white transition-all pb-1 font-display uppercase tracking-widest text-sm">Fale conosco via WhatsApp</a></div>
           </div>
         </section>
       );
